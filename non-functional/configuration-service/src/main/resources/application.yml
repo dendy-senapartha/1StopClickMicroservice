@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: configuration
+  profiles:
+    active:
+      - native # important for file system based configuration server
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: classpath:/config # location for client's configuration files (service-name.yml)
+# EUREKA DISCOVERY
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    healthcheck:
+      enabled: true
+    fetchRegistry: false # no need to resolve other services
+    serviceUrl:
+      defaultZone: http://localhost:9091/eureka # register this service with registry
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    leaseRenewalIntervalInSeconds: 5 # DO NOT DO THIS IN PRODUCTION
+# TOMCAT
+server:
+  port: 9090
+# ACTUATOR ENDPOINTS
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - env
+---
+spring:
+  profiles: docker
+# EUREKA DISCOVERY
+eureka:
+  client:
+    fetchRegistry: false # no need to resolve other services
+    serviceUrl:
+      defaultZone: http://node0.registry/eureka, http://node1.registry/eureka # HA in docker environment
+  instance:
+    instanceId: ${spring.application.name}:${HOSTNAME}
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+# TOMCAT
+server:
+  port: 80
+# ACTUATOR ENDPOINTS
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - env

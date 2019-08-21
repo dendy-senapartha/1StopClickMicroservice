@@ -1,0 +1,44 @@
+version: '3'
+services:
+  configuration:
+    image: mitraisosc/com.mitrais.microservices-configuration-service:0.0.0-SNAPSHOT
+    ports:
+      - "80"
+    environment:
+      - JAVA_OPTS=-Dspring.profiles.active=native,docker
+
+  node0.registry:
+    container_name: node0.registry
+    image: mitraisosc/com.mitrais.microservices-registry-service:0.0.0-SNAPSHOT
+    ports:
+      - "30000:80"
+    environment:
+      - >-
+          JAVA_OPTS=
+          -Dspring.profiles.active=docker
+          -Deureka.instance.hostname=node0.registry
+
+  node1.registry:
+    container_name: node1.registry
+    image: mitraisosc/com.mitrais.microservices-registry-service:0.0.0-SNAPSHOT
+    ports:
+      - "30001:80"
+    environment:
+      - >-
+          JAVA_OPTS=
+          -Dspring.profiles.active=docker
+          -Deureka.instance.hostname=node1.registry
+
+  gateway:
+    image: mitraisosc/com.mitrais.microservices-gateway-service:0.0.0-SNAPSHOT
+    ports:
+      - "80"
+    environment:
+      - JAVA_OPTS=-Dspring.profiles.active=docker
+
+  authorization:
+    image: mitraisosc/com.mitrais.microservices-authorization-service:0.0.0-SNAPSHOT
+    ports:
+      - "80"
+    environment:
+      - JAVA_OPTS=-Dspring.profiles.active=docker
