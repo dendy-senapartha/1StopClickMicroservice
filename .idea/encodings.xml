@@ -5,5 +5,7 @@
     <file url="file://$PROJECT_DIR$/functional" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/non-functional" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/non-functional/configuration-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/non-functional/gateway-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/non-functional/registry-service" charset="UTF-8" />
   </component>
 </project>

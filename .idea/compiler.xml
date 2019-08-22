@@ -8,6 +8,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="configuration-service" />
         <module name="functional" />
+        <module name="gateway-service" />
+        <module name="registry-service" />
       </profile>
     </annotationProcessing>
   </component>

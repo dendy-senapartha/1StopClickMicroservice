@@ -16,6 +16,8 @@
     <description>A parent pom for non-functional services</description>
     <modules>
         <module>configuration-service</module>
+        <module>gateway-service</module>
+        <module>registry-service</module>
     </modules>
 
 

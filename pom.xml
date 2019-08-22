@@ -15,33 +15,43 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.M3</spring-cloud.version>
         <!-- Stand-alone RESTFul application for testing only -->
         <start-class>com.Be1StopClick.service.Main</start-class>
         <asciidoctor.maven.plugin.version>1.5.7.1</asciidoctor.maven.plugin.version>
         <asciidoctorj.version>1.5.7</asciidoctorj.version>
         <jruby.version>9.1.17.0</jruby.version>
+        <docker.skip>true</docker.skip>
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <dependencies>
-        <!-- Eureka for service registration -->
+        <!--
+         Never write another getter or equals method again https://projectlombok.org/
+         -->
         <dependency>
-            <!-- Eureka service registration - CHANGED -->
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
         <!--
-            Provides application metrics information
-            -->
+        Register and discover other services from Service Discovery
+        -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!--
+        Provides application metrics information
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
     </dependencies>
 
     <!-- Spring Cloud dependencies -->
@@ -50,7 +60,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Finchley.RELEASE</version>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
