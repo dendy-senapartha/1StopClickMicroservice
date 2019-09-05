@@ -6,8 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="authorization-service" />
         <module name="configuration-service" />
-        <module name="functional" />
+        <module name="dummy-service" />
         <module name="gateway-service" />
         <module name="registry-service" />
       </profile>

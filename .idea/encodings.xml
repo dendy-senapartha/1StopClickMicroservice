@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/functional" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/functional/authorization-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/functional/dummy-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/non-functional" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/non-functional/configuration-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/non-functional/gateway-service" charset="UTF-8" />

@@ -1,33 +1,28 @@
 spring:
-  cloud:
-    gateway:
-      x-forwarded-for:
-        enabled: true
-      discovery:
-        locator:
-          lower-case-service-id: true
-          enabled: true
-      routes:
-      - id: dummy
-        uri: lb://DUMMY
-        predicates:
-        - Path=/dummy/**
-        filters:
-        - RewritePath=/dummy/(?<remains>.*), /$\{remains}
-      - id: authorization
-        uri: lb://authorization
-        predicates:
-        - Path=/auth/**
-        filters:
-        - RewritePath=/auth/(?<remains>.*), /$\{remains}
+   profiles:
+     active: fixture
+
+token:
+  validity: 3600
+  refreshValidity: 360000
+  signingKey: 123
+security:
+  oauth2:
+    client:
+      client-id: internal
+      client-secret: secret
+      scope: read,write
+      auto-approve-scopes: '.*'
+logging:
+  level:
+    org.springframework.security: DEBUG
 
 # EUREKA DISCOVERY
 eureka:
   client:
     healthcheck:
       enabled: true
-    registerWithEureka: false
-    fetchRegistry: true
+    fetchRegistry: false
     serviceUrl:
       defaultZone: http://localhost:9091/eureka
   instance:
@@ -35,7 +30,17 @@ eureka:
     leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
 # TOMCAT
 server:
-  port: 8081
+  port: 8083
+# ACTUATOR ENDPOINTS
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - env
+
 ---
 spring:
   profiles: docker
