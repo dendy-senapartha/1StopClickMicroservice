@@ -1,8 +1,8 @@
 package com.microservice.auth.event;
 
-import com.microservice.auth.domain.User;
-import com.microservice.auth.domain.UserProfile;
-import com.microservice.auth.repository.UserRepository;
+import com.microservice.auth.dao.repository.UserRepository;
+import com.microservice.auth.model.User;
+import com.microservice.auth.model.UserProfile;
 import com.microservice.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
@@ -18,14 +18,14 @@ import java.util.Optional;
 @RepositoryEventHandler
 @RequiredArgsConstructor
 public class UserProfileEventHandler {
-	private final UserRepository userRepository;
-	private final AuthenticationService authenticationService;
+    private final UserRepository userRepository;
+    private final AuthenticationService authenticationService;
 
-	@HandleBeforeCreate
-	public void handleBeforeCreate(UserProfile profile) {
-		authenticationService.getUsername().ifPresent(username->{
-			Optional<User> user = userRepository.findById(username);
-			user.ifPresent(profile::setUser);
-		});
-	}
+    @HandleBeforeCreate
+    public void handleBeforeCreate(UserProfile profile) {
+        authenticationService.getUsername().ifPresent(username -> {
+            Optional<User> user = userRepository.findByEmail(username);
+            user.ifPresent(profile::setUser);
+        });
+    }
 }

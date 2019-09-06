@@ -35,10 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				// OAuth2 will handle the security
 				.authorizeRequests().anyRequest().permitAll();
-                //.authorizeRequests()
-                //.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                //.antMatchers("/dba/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_DBA')")
-                //.and().formLogin();
 	}
 
 	@Bean

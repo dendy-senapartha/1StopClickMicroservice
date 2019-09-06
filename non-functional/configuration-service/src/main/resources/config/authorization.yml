@@ -1,6 +1,6 @@
-spring:
-   profiles:
-     active: fixture
+#spring:
+ #  profiles:
+  #   active: fixture
 
 token:
   validity: 3600
