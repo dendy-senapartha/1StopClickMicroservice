@@ -18,6 +18,7 @@
     <modules>
         <module>authorization-service</module>
         <module>dummy-service</module>
+        <module>account-service</module>
     </modules>
 
     <properties>

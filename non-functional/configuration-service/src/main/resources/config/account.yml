@@ -1,0 +1,46 @@
+token:
+  signingKey: 123
+
+logging:
+  level:
+    org.springframework.data.rest: DEBUG
+
+# EUREKA DISCOVERY
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:9091/eureka
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+# TOMCAT
+server:
+  port: 8082
+# ACTUATOR ENDPOINTS
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - env
+
+---
+spring:
+  profiles: docker
+# EUREKA DISCOVERY
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://node0.registry/eureka, http://node1.registry/eureka # HA in docker environment
+  instance:
+    instanceId: ${spring.application.name}:${HOSTNAME}
+# TOMCAT
+server:
+  port: 80

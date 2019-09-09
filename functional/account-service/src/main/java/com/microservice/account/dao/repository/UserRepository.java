@@ -1,7 +1,8 @@
-package com.microservice.auth.dao.repository;
+package com.microservice.account.dao.repository;
 
-import com.microservice.auth.dao.UserDao;
-import com.microservice.auth.model.User;
+
+import com.microservice.account.dao.UserDao;
+import com.microservice.account.model.User;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;

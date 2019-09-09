@@ -1,6 +1,6 @@
-package com.microservice.auth.dao;
+package com.microservice.account.dao;
 
-import com.microservice.auth.model.User;
+import com.microservice.account.model.User;
 
 import java.util.Optional;
 
