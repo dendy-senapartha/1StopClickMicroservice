@@ -51,7 +51,6 @@ public class UserRepository implements UserDao {
         Query query = entityManager.createQuery(hql);
         query.setParameter("id", aLong);
         List<User> results = query.getResultList();
-        //session.close();
         User user = null;
         for (User e : results) {
             user = e;
