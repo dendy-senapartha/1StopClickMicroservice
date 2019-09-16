@@ -16,8 +16,7 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.M3</spring-cloud.version>
-        <!-- Stand-alone RESTFul application for testing only -->
-        <start-class>com.Be1StopClick.service.Main</start-class>
+
         <asciidoctor.maven.plugin.version>1.5.7.1</asciidoctor.maven.plugin.version>
         <asciidoctorj.version>1.5.7</asciidoctorj.version>
         <jruby.version>9.1.17.0</jruby.version>
@@ -69,7 +68,33 @@
 
 
     <build>
-        <finalName>${artifactId}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.4.9</version>
+                    <configuration>
+                        <skip>${docker.skip}</skip>
+                        <repository>dendyprtha/1stopclick-microservice/${project.artifactId}</repository>
+                        <tag>${project.version}</tag>
+                        <buildArgs>
+                            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+                        <pullNewerImage>false</pullNewerImage>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>push</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
