@@ -1,5 +1,6 @@
 package com.microservice.auth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -27,6 +28,7 @@ public class UserProfile {
 
     @OneToOne
     @MapsId
+    @JsonIgnoreProperties("userProfile")
     private User user;
 
     public UserProfile() {
