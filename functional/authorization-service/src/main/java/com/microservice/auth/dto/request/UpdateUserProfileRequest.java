@@ -1,13 +1,14 @@
-package com.microservice.auth.dto;
+package com.microservice.auth.dto.request;
 
 /*
  * Created by dendy-prtha on 17/05/2019.
- * Track type DTO
+ * Create Order DTO
+ * Draft, Issued, Paid, Void(https://www.replicon.com/help/setting-the-status-of-an-invoice/)
  */
 
-public class UserProfileDTO {
+public class UpdateUserProfileRequest {
 
-    private Long id;
+    private Long userId;
 
     private String name;
 
@@ -15,15 +16,7 @@ public class UserProfileDTO {
 
     private String phone;
 
-    private String image_url;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String imageUrl;
 
     public String getName() {
         return name;
@@ -49,11 +42,19 @@ public class UserProfileDTO {
         this.phone = phone;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
