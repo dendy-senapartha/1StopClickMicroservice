@@ -21,7 +21,7 @@ public class AuthController {
 	private final UserRepository userRepository;
 
 	private final ModelMapper modelMapper;
-
+//https://www.devglan.com/spring-security/spring-oauth2-role-based-authorization
 	@GetMapping("/info")
 	public ResponseEntity<?> info(Principal principal) {
 		if (principal != null) {

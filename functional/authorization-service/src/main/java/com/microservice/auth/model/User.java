@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.Set;
 
 /*
  * Created by dendy-prtha on 01/03/2019.
@@ -46,6 +47,11 @@ public class User implements UserDetails {
             orphanRemoval = true)
     @JsonIgnoreProperties("user")
     private UserProfile userProfile;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "User_ROLES",
+            joinColumns =  @JoinColumn(name ="user_id"),inverseJoinColumns= @JoinColumn(name="role_id"))
+    private Set<Role> roles;
 
     public User() {
     }
@@ -123,6 +129,14 @@ public class User implements UserDetails {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

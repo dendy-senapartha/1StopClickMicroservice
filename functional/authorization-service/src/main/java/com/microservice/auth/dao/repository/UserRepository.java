@@ -61,7 +61,10 @@ public class UserRepository implements UserDao {
 
     @Override
     public List<User> findAll() {
-        return null;
+        String hql = "FROM User user";
+        Query query = entityManager.createQuery(hql);
+        List<User> results = query.getResultList();
+        return results;
     }
 
     @Override

@@ -1,30 +1,19 @@
-package com.microservice.auth.dto;
+package com.microservice.auth.dto.request;
 
+import com.microservice.auth.dto.UserProfileDTO;
 /*
- * Created by dendy-prtha on 01/03/2019.
- * User DTO
+ * Created by dendy-prtha on 17/09/2019.
+ * register user request
  */
 
-import com.microservice.auth.model.Role;
-
-import java.util.Set;
-
-public class UserDTO{
+public class UpdateUserRequest {
     private Long id;
-
     private String email;
-
-    private Boolean emailVerified = false;
-
+    private Boolean emailVerified;
     private String password;
-
     private String provider;
-
     private String providerId;
-
     private UserProfileDTO userProfile;
-
-    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -80,13 +69,5 @@ public class UserDTO{
 
     public void setUserProfile(UserProfileDTO userProfile) {
         this.userProfile = userProfile;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 }
