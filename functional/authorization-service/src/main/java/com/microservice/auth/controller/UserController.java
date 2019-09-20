@@ -2,6 +2,7 @@ package com.microservice.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.microservice.auth.dao.RoleDao;
 import com.microservice.auth.dao.UserDao;
 import com.microservice.auth.dto.UserDTO;
 import com.microservice.auth.dto.UserProfileDTO;
@@ -10,6 +11,7 @@ import com.microservice.auth.dto.request.RegisterUserRequest;
 import com.microservice.auth.dto.request.UpdateUserProfileRequest;
 import com.microservice.auth.dto.request.UpdateUserRequest;
 import com.microservice.auth.dto.response.BaseResponse;
+import com.microservice.auth.model.Role;
 import com.microservice.auth.model.User;
 import com.microservice.auth.model.UserProfile;
 import com.microservice.auth.util.IdUtility;
@@ -20,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -40,14 +43,18 @@ public class UserController {
 
     private final UserDao userRepository;
 
+    private final RoleDao roleRepository;
+
     private final ModelMapper modelMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public BaseResponse insertUser(@RequestBody RegisterUserRequest request) {
+    public BaseResponse registerUser(@RequestBody RegisterUserRequest request) {
         String email = request.getEmail();
         boolean emailVerified = false;
-        String password = request.getPassword();
+        String password = passwordEncoder.encode(request.getPassword());
         String provider = request.getProvider();
         String provider_id = IdUtility.generateUniqueID();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -56,6 +63,14 @@ public class UserController {
         User user = new User(null, email, emailVerified, password, provider, provider_id);
         user.addUserProfile(new UserProfile(null, usrPrfl.getName(),
                 usrPrfl.getDob(), usrPrfl.getPhone(), usrPrfl.getImageUrl()));
+
+        for (Role requestedRole : request.getRoles()) {
+            Optional<Role> roleOptional = roleRepository.findById(requestedRole.getId());
+            if (roleOptional.isPresent()) {
+                user.addRole(roleOptional.get());
+            }
+        }
+
         BaseResponse response = new BaseResponse();
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
@@ -93,6 +108,7 @@ public class UserController {
 
     @PostMapping(value = "/update-user-profile",
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<?> updateUserProfile(@RequestBody UpdateUserProfileRequest request) {
         BaseResponse response = new BaseResponse();
 
@@ -126,17 +142,30 @@ public class UserController {
     @PostMapping(value = "/admin/update-user", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest request) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Object usrPrflObject = request.getUserProfile();
-        UserProfile usrPrfl = objectMapper.convertValue(usrPrflObject, UserProfile.class);
-        User user = new User(request.getId(), request.getEmail(), request.getEmail());
-        user.getUserProfile().setName(usrPrfl.getName());
-        user.getUserProfile().setDob(usrPrfl.getDob());
-        user.getUserProfile().setPhone(usrPrfl.getPhone());
-        user.getUserProfile().setImageUrl(usrPrfl.getImageUrl());
-
         BaseResponse response = new BaseResponse();
-        response.setStatus(userRepository.update(user) + "");
+        Optional<User> userOptional = userRepository.findById(request.getId());
+        User currentUser = null;
+        if (userOptional.isPresent()) {
+            currentUser = userOptional.get();
+            currentUser.setEmail(request.getEmail());
+            currentUser.setPassword(passwordEncoder.encode(request.getPassword()));
+            currentUser.setProvider(request.getProvider());
+            currentUser.setProviderId(request.getProviderId());
+            currentUser.getUserProfile().setName(request.getUserProfile().getName());
+            currentUser.getUserProfile().setDob(request.getUserProfile().getDob());
+            currentUser.getUserProfile().setPhone(request.getUserProfile().getPhone());
+            currentUser.getUserProfile().setImageUrl(request.getUserProfile().getImage_url());
+
+            //update the role
+            currentUser.removeAllRole();
+            for (Role requestedRole : request.getRoles()) {
+                Optional<Role> roleOptional = roleRepository.findById(requestedRole.getId());
+                if (roleOptional.isPresent()) {
+                    currentUser.addRole(roleOptional.get());
+                }
+            }
+        }
+        response.setStatus(userRepository.update(currentUser) + "");
         return ResponseEntity.ok(response);
     }
 

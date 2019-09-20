@@ -1,6 +1,9 @@
 package com.microservice.auth.dto.request;
 
 import com.microservice.auth.dto.UserProfileDTO;
+import com.microservice.auth.model.Role;
+
+import java.util.Set;
 /*
  * Created by dendy-prtha on 17/09/2019.
  * register user request
@@ -14,6 +17,7 @@ public class RegisterUserRequest {
     private String provider;
     private String providerId;
     private UserProfileDTO userProfile;
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -69,5 +73,13 @@ public class RegisterUserRequest {
 
     public void setUserProfile(UserProfileDTO userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

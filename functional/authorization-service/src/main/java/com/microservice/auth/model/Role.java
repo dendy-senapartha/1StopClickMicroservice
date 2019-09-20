@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 /*
  * Created by dendy-prtha on 19/09/2019.
  * Role entity
@@ -27,6 +29,8 @@ public class Role {
     private Long createdOn;
     @Column(name = "modified_on")
     private Long modifiedOn;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
     public RoleType getName() {
         return name;
@@ -66,5 +70,13 @@ public class Role {
 
     public void setModifiedOn(Long modifiedOn) {
         this.modifiedOn = modifiedOn;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

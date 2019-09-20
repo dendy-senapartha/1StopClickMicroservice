@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /*
@@ -48,10 +49,15 @@ public class User implements UserDetails {
     @JsonIgnoreProperties("user")
     private UserProfile userProfile;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "User_ROLES",
-            joinColumns =  @JoinColumn(name ="user_id"),inverseJoinColumns= @JoinColumn(name="role_id"))
-    private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -135,8 +141,23 @@ public class User implements UserDetails {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void addRole(Role role) {
+        roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(Role role) {
+        role.getUsers().remove(this);
+        roles.remove(role);
+    }
+
+    public void removeAllRole() {
+        for(Role role : roles)
+        {
+            role.getUsers().remove(this);
+            //roles.remove(role);
+        }
+        roles.clear();
     }
 
     @Override
@@ -154,7 +175,7 @@ public class User implements UserDetails {
     }
 
     public void removeUserProfile(UserProfile userProfile) {
-        if(userProfile !=null){
+        if (userProfile != null) {
             userProfile.setUser(null);
         }
         this.userProfile = null;
