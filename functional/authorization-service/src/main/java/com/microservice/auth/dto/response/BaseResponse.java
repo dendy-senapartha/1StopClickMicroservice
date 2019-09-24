@@ -5,11 +5,11 @@ package com.microservice.auth.dto.response;
  *
  */
 
-public class UpdateUserProfileResponse {
+public class BaseResponse {
 
-    private String status;
+    private String status = "";
 
-    private String message;
+    private String message = "";
 
     public String getStatus() {
         return status;

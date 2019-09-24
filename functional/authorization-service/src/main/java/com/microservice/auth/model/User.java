@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /*
  * Created by dendy-prtha on 01/03/2019.
@@ -46,6 +48,16 @@ public class User implements UserDetails {
             orphanRemoval = true)
     @JsonIgnoreProperties("user")
     private UserProfile userProfile;
+
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -125,6 +137,29 @@ public class User implements UserDetails {
         this.providerId = providerId;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(Role role) {
+        role.getUsers().remove(this);
+        roles.remove(role);
+    }
+
+    public void removeAllRole() {
+        for(Role role : roles)
+        {
+            role.getUsers().remove(this);
+            //roles.remove(role);
+        }
+        roles.clear();
+    }
+
     @Override
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", password=" + password + "]";
@@ -140,7 +175,7 @@ public class User implements UserDetails {
     }
 
     public void removeUserProfile(UserProfile userProfile) {
-        if(userProfile !=null){
+        if (userProfile != null) {
             userProfile.setUser(null);
         }
         this.userProfile = null;
