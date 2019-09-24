@@ -20,6 +20,12 @@ spring:
         - Path=/auth/**
         filters:
         - RewritePath=/auth/(?<remains>.*), /$\{remains}
+      - id: music
+        uri: lb://music
+        predicates:
+        - Path=/music/**
+        filters:
+        - RewritePath=/music/(?<remains>.*), /$\{remains}
 
 # EUREKA DISCOVERY
 eureka:
