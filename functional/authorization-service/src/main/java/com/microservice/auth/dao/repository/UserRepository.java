@@ -61,7 +61,10 @@ public class UserRepository implements UserDao {
 
     @Override
     public List<User> findAll() {
-        return null;
+        String hql = "FROM User user";
+        Query query = entityManager.createQuery(hql);
+        List<User> results = query.getResultList();
+        return results;
     }
 
     @Override
@@ -80,11 +83,26 @@ public class UserRepository implements UserDao {
 
     @Override
     public boolean update(User user) {
-        return false;
+        boolean status = false;
+        try {
+            entityManager.merge(user);
+            status = true;
+        } catch (HibernateException ex) {
+            System.out.println("exception: " + ex);
+        }
+
+        return status;
     }
 
     @Override
     public boolean delete(User user) {
-        return false;
+        boolean status = false;
+        try {
+            entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
+            status = true;
+        } catch (HibernateException ex) {
+            System.out.println("exception: " + ex);
+        }
+        return status;
     }
 }

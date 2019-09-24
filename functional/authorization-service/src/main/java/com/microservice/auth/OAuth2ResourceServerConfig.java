@@ -31,7 +31,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
 				.and()
 				.authorizeRequests()
-				.antMatchers(HttpMethod.POST,"/register").permitAll()
+				.antMatchers(HttpMethod.POST,"/register/**").permitAll()
+				.antMatchers("/admin/**").access("hasRole('ADMIN')")
 				.anyRequest().authenticated();
 	}
 }

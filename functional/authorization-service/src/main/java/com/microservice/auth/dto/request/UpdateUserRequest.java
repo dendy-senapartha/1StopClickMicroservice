@@ -9,7 +9,7 @@ import java.util.Set;
  * register user request
  */
 
-public class RegisterUserRequest {
+public class UpdateUserRequest {
     private Long id;
     private String email;
     private Boolean emailVerified;

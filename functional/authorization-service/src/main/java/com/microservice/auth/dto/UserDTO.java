@@ -5,6 +5,10 @@ package com.microservice.auth.dto;
  * User DTO
  */
 
+import com.microservice.auth.model.Role;
+
+import java.util.Set;
+
 public class UserDTO{
     private Long id;
 
@@ -19,6 +23,8 @@ public class UserDTO{
     private String providerId;
 
     private UserProfileDTO userProfile;
+
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -74,5 +80,13 @@ public class UserDTO{
 
     public void setUserProfile(UserProfileDTO userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
