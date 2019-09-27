@@ -19,6 +19,8 @@
         <module>authorization-service</module>
         <module>dummy-service</module>
         <module>account-service</module>
+        <module>music-service</module>
+        <module>movie-service</module>
     </modules>
 
     <properties>

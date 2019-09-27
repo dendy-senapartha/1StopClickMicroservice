@@ -8,10 +8,13 @@ method: Balance Payment and PayPal Payment.
 
 ## Services
 For now, planned services will be :  
-1. Account service : Manage user account and authentication of the system.  
-2. Product service : Manage product such movie, book, and music.  
-3. Order service : Manage order from user.  
-4. Payment service : Manage payment of user.  
+1. Auth service : Manage user authentication.
+2. Account service : Manage user balance.  
+3. Music service : Manage music item  
+4. Movie service : Manage movie item
+5. E-book service : Manage e-book item
+6. Order service : Manage order from user.  
+7. Payment service : Manage payment of user.  
 
 ## Getting Started
 
