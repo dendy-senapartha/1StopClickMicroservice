@@ -1,4 +1,4 @@
-package com.microservice.music;
+package com.microservice.movie;
 
 import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource({"classpath:hibernate.properties"})
 @ComponentScans(value = {
-        @ComponentScan("com.microservice.music.repository")
+        @ComponentScan("com.microservice.movie.repository")
 })
 @RequiredArgsConstructor
 public class HibernateConf {
@@ -31,7 +31,7 @@ public class HibernateConf {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("com.microservice.music.model");
+        em.setPackagesToScan("com.microservice.movie.model");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(hibernateProperties());

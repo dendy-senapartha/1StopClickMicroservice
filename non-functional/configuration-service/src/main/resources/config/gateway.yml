@@ -26,6 +26,12 @@ spring:
         - Path=/music/**
         filters:
         - RewritePath=/music/(?<remains>.*), /$\{remains}
+      - id: movie
+        uri: lb://movie
+        predicates:
+        - Path=/movie/**
+        filters:
+        - RewritePath=/movie/(?<remains>.*), /$\{remains}
 
 # EUREKA DISCOVERY
 eureka:
