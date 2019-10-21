@@ -1,14 +1,15 @@
-package com.microservice.music.dto;
+package com.microservice.order.model.external;
+
+
+import lombok.Data;
 
 /*
  * Created by dendy-prtha on 17/05/2019.
  * Track type DTO
  */
 
-import lombok.Data;
-
 @Data
-public class TrackTypeDTO {
+public class TrackType {
 
     private int id;
 

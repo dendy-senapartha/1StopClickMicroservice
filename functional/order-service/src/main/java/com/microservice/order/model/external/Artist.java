@@ -1,4 +1,4 @@
-package com.microservice.music.dto;
+package com.microservice.order.model.external;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.util.Date;
  */
 
 @Data
-public class ArtistDTO {
+public class Artist {
 
     private int id;
 

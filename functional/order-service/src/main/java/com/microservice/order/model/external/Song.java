@@ -1,4 +1,4 @@
-package com.microservice.music.dto;
+package com.microservice.order.model.external;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.util.*;
  */
 
 @Data
-public class SongDTO {
+public class Song {
 
     private int id;
 
@@ -29,7 +29,7 @@ public class SongDTO {
 
     private Date created;
 
-    private Set<SubcategoryDTO> subcategories = new HashSet<>();
+    private Set<Subcategory> subcategories = new HashSet<>();
 
-    private List<TrackDTO> trackList = new ArrayList<>();
+    private List<Track> trackList = new ArrayList<>();
 }

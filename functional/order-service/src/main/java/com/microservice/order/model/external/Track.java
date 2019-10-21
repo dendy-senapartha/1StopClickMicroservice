@@ -1,4 +1,4 @@
-package com.microservice.music.dto;
+package com.microservice.order.model.external;
 
 import lombok.Data;
 
@@ -11,15 +11,15 @@ import java.util.List;
  */
 
 @Data
-public class TrackDTO {
+public class Track {
 
     private int id;
 
-    private TrackTypeDTO trackType;
+    private TrackType trackType;
 
     private String streamUrl;
 
     private int length;
 
-    private List<ArtistDTO> artists = new ArrayList<>();
+    private List<Artist> artists = new ArrayList<>();
 }

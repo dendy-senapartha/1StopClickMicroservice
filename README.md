@@ -22,10 +22,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+To compile and run the apps, you need to install following tools:
 
 ```
-Give examples
+1. Java SDK
+2. MariaDB Database
+3. IDE that support maven building system. Ex : Intellij IDEA
+
 ```
 
 ### Installing

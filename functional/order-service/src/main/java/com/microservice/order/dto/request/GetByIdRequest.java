@@ -7,6 +7,6 @@ import lombok.Data;
  */
 
 @Data
-public class GetMovieByIdRequest {
+public class GetByIdRequest {
     private String id;
 }

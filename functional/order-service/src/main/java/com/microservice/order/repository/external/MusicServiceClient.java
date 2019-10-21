@@ -2,6 +2,7 @@ package com.microservice.order.repository.external;
 
 import com.microservice.order.dto.request.GetByIdRequest;
 import com.microservice.order.model.external.Movie;
+import com.microservice.order.model.external.Song;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
  * auth microservice
  */
 
-@FeignClient(name = "movie")
-public interface MovieServiceClient {
+@FeignClient(name = "music")
+public interface MusicServiceClient {
 
-    @GetMapping(value = "/get-movie-by-id", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    ResponseEntity<Movie> getMovieById(@RequestBody GetByIdRequest request);
+    @GetMapping(value = "/get-music-by-id", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    ResponseEntity<Song> getMusicById(@RequestBody GetByIdRequest request);
 }

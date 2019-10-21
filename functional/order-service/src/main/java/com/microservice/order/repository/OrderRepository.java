@@ -52,8 +52,7 @@ public class OrderRepository implements OrderDao {
     public List<Orders> findUserDraftOrder(long userId) {
         String hql = "SELECT DISTINCT ords FROM Orders ords " +
                 "INNER JOIN ords.invoice invc " +
-                "INNER JOIN invc.user usr " +
-                "WHERE usr.id=" + userId + " " +
+                "WHERE invc.userId=" + userId + " " +
                 "AND invc.status LIKE 'DRAFT'";
         //System.out.println(hql);
         Query query = entityManager.createQuery(hql);
