@@ -28,12 +28,13 @@ public class AuthController {
 			Optional<User> user = userRepository.findByEmail(principal.getName());
 			if (user.isPresent()) {
                 UserDTO dto = modelMapper.map(user.get(), UserDTO.class);
-				Resource<UserDTO> resource = new Resource<>(dto);
-				resource.add(ControllerLinkBuilder.linkTo(AuthController.class)
-						.slash("info").withSelfRel());
-				return ResponseEntity.ok(resource);
+				//Resource<UserDTO> resource = new Resource<>(dto);
+				//resource.add(ControllerLinkBuilder.linkTo(AuthController.class)
+				//		.slash("info").withSelfRel());
+				return ResponseEntity.ok(dto);
 			}
 		}
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 	}
+
 }

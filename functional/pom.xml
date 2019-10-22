@@ -21,6 +21,7 @@
         <module>account-service</module>
         <module>music-service</module>
         <module>movie-service</module>
+        <module>order-service</module>
     </modules>
 
     <properties>

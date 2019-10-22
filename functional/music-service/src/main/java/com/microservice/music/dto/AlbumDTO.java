@@ -1,5 +1,7 @@
 package com.microservice.music.dto;
 
+import lombok.Data;
+
 import java.util.Date;
 
 /*
@@ -7,6 +9,7 @@ import java.util.Date;
  * DTO for Album request
  */
 
+@Data
 public class AlbumDTO {
 
     private int id;
@@ -16,36 +19,4 @@ public class AlbumDTO {
     private Date releaseDate;
 
     private String albumImageUrl;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public String getAlbumImageUrl() {
-        return albumImageUrl;
-    }
-
-    public void setAlbumImageUrl(String albumImageUrl) {
-        this.albumImageUrl = albumImageUrl;
-    }
 }
