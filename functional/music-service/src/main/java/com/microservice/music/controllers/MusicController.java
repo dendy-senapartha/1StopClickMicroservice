@@ -3,6 +3,7 @@ package com.microservice.music.controllers;
 import com.microservice.music.dto.AlbumDTO;
 import com.microservice.music.dto.SongDTO;
 import com.microservice.music.dto.request.GetAlbumSongRequest;
+import com.microservice.music.dto.request.GetMusicById;
 import com.microservice.music.dto.response.BaseResponse;
 import com.microservice.music.model.Album;
 import com.microservice.music.model.Product;
@@ -36,7 +37,7 @@ public class MusicController {
 
     private final ModelMapper modelMapper;
 
-    @GetMapping(value = "/get-all-tracks",
+    @GetMapping(value = "/get-all-music",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllMusic() {
         List<SongDTO> songDTO = new ArrayList<>();
@@ -59,7 +60,7 @@ public class MusicController {
         return ResponseEntity.ok(albumDTO);
     }
 
-    @PostMapping(value = "/get-album-songs",
+    @PostMapping(value = "/get-album-music",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAlbumSong(@RequestBody GetAlbumSongRequest request) {
         List<SongDTO> songDTO = new ArrayList<>();
@@ -68,6 +69,18 @@ public class MusicController {
         for (Product product : songList) {
             songDTO.add(modelMapper.map(product, SongDTO.class));
         }
+        return ResponseEntity.ok(songDTO);
+    }
+
+    @PostMapping(value = "/get-music-by-id",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getSongById(@RequestBody GetMusicById request) {
+        SongDTO songDTO = new SongDTO();
+        Optional<Product> product = productRepository.findById(request.getId());
+        if (product.isPresent()) {
+            songDTO = modelMapper.map(product.get(), SongDTO.class);
+        }
+
         return ResponseEntity.ok(songDTO);
     }
 

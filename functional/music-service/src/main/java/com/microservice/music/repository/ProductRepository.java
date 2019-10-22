@@ -49,81 +49,6 @@ public class ProductRepository implements ProductDao {
     }
 
     @Override
-    public List<Product> findAllProductByCategoryId(int catId) {
-        String hql = "FROM Product prdct WHERE prdct.category.id = " + catId;
-        System.out.println(hql);
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public List<Product> findProductByCategoryIdAndTitle(int catId, String title) {
-        String hql = "SELECT DISTINCT prdct FROM Product prdct " +
-                "LEFT JOIN prdct.category ctgry " +
-                "LEFT JOIN prdct.subcategory sbctgry " +
-                "WHERE ctgry.id = " + catId +
-                "AND prdct.productName LIKE '%" + title + "%'";
-
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public List<Product> getBuyedProductOfUserByCategory(int catId, String userId) {
-        String hql = "SELECT DISTINCT prdct FROM Invoice invc " +
-                "INNER JOIN invc.user usr " +
-                "INNER JOIN invc.orders ordrs " +
-                "INNER JOIN ordrs.orderItemList ordritm " +
-                "INNER JOIN ordritm.product prdct " +
-                "INNER JOIN prdct.category ctgry " +
-                "WHERE ctgry.id = " + catId +
-                "AND (invc.status LIKE 'DRAFT' OR invc.status LIKE 'ISSUED' OR invc.status LIKE 'PAID') " +
-                "AND usr.id =" + userId;
-
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public List<Product> findBuyedProductOfUserByCategoryAndProdId(int catId, String userId, String productId) {
-        String hql = "SELECT DISTINCT prdct FROM Invoice invc " +
-                "INNER JOIN invc.user usr " +
-                "INNER JOIN invc.orders ordrs " +
-                "INNER JOIN ordrs.orderItemList ordritm " +
-                "INNER JOIN ordritm.product prdct " +
-                "INNER JOIN prdct.category ctgry " +
-                "WHERE ctgry.id = " + catId + " " +
-                "AND invc.status LIKE 'PAID' " +
-                "AND usr.id = " + userId + " " +
-                "AND prdct.id = " + productId;
-
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public List<Product> findBuyedProductOfUserByCategoryAndProductName(int catId, String userId, String productName) {
-        String hql = "SELECT DISTINCT prdct FROM Invoice invc " +
-                "INNER JOIN invc.user usr " +
-                "INNER JOIN invc.orders ordrs " +
-                "INNER JOIN ordrs.orderItemList ordritm " +
-                "INNER JOIN ordritm.product prdct " +
-                "INNER JOIN prdct.category ctgry " +
-                "WHERE ctgry.id = " + catId + " " +
-                "AND invc.status LIKE 'PAID' " +
-                "AND usr.id = " + userId + " " +
-                "AND prdct.productName LIKE '%" + productName + "%'";
-
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
-
-    @Override
     public List<Product> getAlbumProducts(String albumId) {
         String hql = "SELECT DISTINCT prdct FROM Product prdct " +
                 "INNER JOIN prdct.trackList track " +
@@ -134,46 +59,6 @@ public class ProductRepository implements ProductDao {
         List<Product> results = query.getResultList();
         return results;
     }
-
-    @Override
-    public List<Product> findBuyedProductByUserIdAndAlbumId(String userId, String albumId) {
-        String hql = "SELECT DISTINCT prdct FROM Invoice invc " +
-                "INNER JOIN invc.user usr " +
-                "INNER JOIN invc.orders ordrs " +
-                "INNER JOIN ordrs.orderItemList ordritm " +
-                "INNER JOIN ordritm.product prdct " +
-                "INNER JOIN prdct.trackList track " +
-                "INNER JOIN track.album albm " +
-                "WHERE usr.id = " + userId + " " +
-                "AND (invc.status LIKE 'DRAFT' OR invc.status LIKE 'ISSUED' OR invc.status LIKE 'PAID') " +
-                "AND albm.id = " + albumId;
-        System.out.println(hql);
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public Product checkIfProductAlreadyOrdered(String userId, String productId) {
-        String hql = "SELECT DISTINCT prdct FROM Invoice invc " +
-                "INNER JOIN invc.user usr " +
-                "INNER JOIN invc.orders ordrs " +
-                "INNER JOIN ordrs.orderItemList ordritm " +
-                "INNER JOIN ordritm.product prdct " +
-                "INNER JOIN prdct.category ctgry " +
-                "WHERE invc.status LIKE 'PAID' " +
-                "AND usr.id = " + userId + " " +
-                "AND prdct.id = " + productId;
-
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        Product product = null;
-        if (!results.isEmpty()) {
-            product = results.get(0);
-        }
-        return product;
-    }
-
 
     @Override
     public boolean save(Product o) {
