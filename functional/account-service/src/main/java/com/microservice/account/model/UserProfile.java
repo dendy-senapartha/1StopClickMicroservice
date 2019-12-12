@@ -2,6 +2,8 @@ package com.microservice.account.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 /*
@@ -15,18 +17,34 @@ import javax.persistence.*;
 public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
+
     @Column(name = "name")
+    @Getter
+    @Setter
     private String name;
+
     @Column(name = "dob")
+    @Getter
+    @Setter
     private String dob;
+
     @Column(name = "phone")
+    @Getter
+    @Setter
     private String phone;
+
     @Column(name = "image_url")
+    @Getter
+    @Setter
     private String imageUrl;
 
     @OneToOne
     @MapsId
+    @Getter
+    @Setter
     private User user;
 
     public UserProfile() {
@@ -44,53 +62,5 @@ public class UserProfile {
     public String toString() {
         return "UserProfile [id=" + getId() + ", name=" + name +
                 ", dob=" + dob + ", phone=" + phone + ", imageUrl=" + "]";
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

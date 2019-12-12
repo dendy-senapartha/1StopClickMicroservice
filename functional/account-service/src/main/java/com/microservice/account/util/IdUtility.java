@@ -1,11 +1,11 @@
 package com.microservice.account.util;
 
+import java.util.Random;
+
 /*
  * Created by dendy-prtha on 25/03/2019.
  * utility for user ID
  */
-
-import java.util.Random;
 
 public class IdUtility {
 
