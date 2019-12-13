@@ -1,13 +1,12 @@
 package com.microservice.auth.event;
 
-import com.microservice.auth.dao.repository.UserRepository;
+import com.microservice.auth.repository.UserRepository;
 import com.microservice.auth.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +15,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
+
 import java.util.Set;
 
 /**
@@ -38,8 +35,6 @@ public class UserEventHandler {
 		if (!userRepository.findByEmail(user.getUsername()).isPresent()) {
 			// encrypt password
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			// assign default role
-			//user.setRoles(new HashSet<>(Collections.singletonList(Role.USER)));
 		}
 		else {
 			throw new DuplicateKeyException("Username is already in use");
