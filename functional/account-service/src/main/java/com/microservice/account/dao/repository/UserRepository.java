@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 /*
  * Created by dendy-prtha on 01/03/2019.
@@ -24,6 +25,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserRepository implements UserDao {
 
+    Logger log = Logger.getLogger(UserRepository.class.getSimpleName());
+
     private final EntityManager entityManager;
 
     private final PasswordEncoder passwordEncoder;
@@ -31,7 +34,7 @@ public class UserRepository implements UserDao {
     @Override
     public Optional<User> findByEmail(String email) {
         String hql = "FROM User user WHERE user.email = :email";
-        System.out.println(hql);
+        log.info(hql);
         Query query = entityManager.createQuery(hql);
         query.setParameter("email", email);
         List<User> results = query.getResultList();
@@ -39,7 +42,7 @@ public class UserRepository implements UserDao {
         for (User e : results) {
             user = e;
             String passs = passwordEncoder.encode(user.getPassword());
-            System.out.println("raw password : " + user.getPassword() + ", encrypted pasword : " + passs);
+            log.info("raw password : " + user.getPassword() + ", encrypted pasword : " + passs);
         }
         return Optional.ofNullable(user);
     }
@@ -47,7 +50,7 @@ public class UserRepository implements UserDao {
     @Override
     public Optional<User> findById(Long aLong) {
         String hql = "FROM User user WHERE user.id = :id";
-        System.out.println(hql);
+        log.info(hql);
         Query query = entityManager.createQuery(hql);
         query.setParameter("id", aLong);
         List<User> results = query.getResultList();
@@ -70,7 +73,7 @@ public class UserRepository implements UserDao {
             entityManager.persist(user);
             status = true;
         } catch (HibernateException ex) {
-            System.out.println("exception: " + ex);
+            log.warning("exception: " + ex);
             status = false;
         }
 
