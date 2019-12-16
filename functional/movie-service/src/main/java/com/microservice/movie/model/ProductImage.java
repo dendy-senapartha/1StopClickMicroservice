@@ -2,6 +2,7 @@ package com.microservice.movie.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Data;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 
@@ -15,6 +16,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "product_image")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Data
 public class ProductImage {
 
     @Id
@@ -23,20 +25,4 @@ public class ProductImage {
 
     @Column(name = "image_url")
     private String imageUrl;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 }
