@@ -1,13 +1,14 @@
 package com.microservice.music.repository;
 
 import com.microservice.music.model.Album;
-import com.microservice.music.repository.dao.AlbumDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,54 +18,18 @@ import java.util.Optional;
  */
 
 @Transactional
-@Component
-public class AlbumRepository implements AlbumDao {
+@Repository
+public interface AlbumRepository extends JpaRepository<Album, Serializable> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    public List<Album> getBuyedAlbumOfUser(String userId) {
-        String hql = "SELECT DISTINCT albm FROM Invoice invc " +
-                "INNER JOIN invc.user usr " +
-                "INNER JOIN invc.orders ordrs " +
-                "INNER JOIN ordrs.orderItemList ordritm " +
-                "INNER JOIN ordritm.product prdct " +
-                "INNER JOIN prdct.trackList track " +
-                "INNER JOIN track.album albm " +
-                "WHERE usr.id =" + userId;
-
-        Query query = entityManager.createQuery(hql);
-        List<Album> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public Optional<Album> findById(Integer integer) {
-        return Optional.empty();
-    }
-
-    @Override
-    public List<Album> findAll() {
-        String hql = "From Album";
-        System.out.println(hql);
-        Query query = entityManager.createQuery(hql);
-        List<Album> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public boolean save(Album o) {
-        return false;
-    }
-
-    @Override
-    public boolean update(Album o) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Album o) {
-        return false;
-    }
+    /*
+    @Query("SELECT DISTINCT albm FROM Invoice invc " +
+            "INNER JOIN invc.user usr " +
+            "INNER JOIN invc.orders ordrs " +
+            "INNER JOIN ordrs.orderItemList ordritm " +
+            "INNER JOIN ordritm.product prdct " +
+            "INNER JOIN prdct.trackList track " +
+            "INNER JOIN track.album albm " +
+            "WHERE usr.id = :userId")
+    List<Album> getBuyedAlbumOfUser(@Param("userId") String userId);
+    */
 }

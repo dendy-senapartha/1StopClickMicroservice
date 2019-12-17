@@ -3,6 +3,8 @@ package com.microservice.music.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 
@@ -22,26 +24,36 @@ public class Track {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "product_id")
+    @Setter
     private Product product;
 
     @OneToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "track_type_id")
+    @Setter
     private TrackType trackType;
 
     @Column(name = "stream_url")
+    @Getter
+    @Setter
     private String streamUrl;
 
     @Column(name = "length")
+    @Getter
+    @Setter
     private int length;
 
     @ManyToOne
     @JsonIgnoreProperties("tracks")
+    @Getter
+    @Setter
     private Album album;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -50,62 +62,15 @@ public class Track {
             joinColumns={@JoinColumn(name="track_id", referencedColumnName="id")},
             inverseJoinColumns={@JoinColumn(name="artist_id", referencedColumnName="id")})
     @JsonIgnoreProperties("tracks")
-    private List<Artist> artists= new ArrayList<>();
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Getter
+    @Setter
+    private List<Artist> artists;
 
     public Product getProduct() {
         return (Product) Hibernate.unproxy(product);
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public String getStreamUrl() {
-        return streamUrl;
-    }
-
-    public void setStreamUrl(String streamUrl) {
-        this.streamUrl = streamUrl;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
     public TrackType getTrackType() {
         return (TrackType) Hibernate.unproxy(trackType);
-    }
-
-    public void setTrackType(TrackType trackType) {
-        this.trackType = trackType;
-    }
-
-    public List<Artist> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
-
-
-    public Album getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(Album album) {
-        this.album = album;
     }
 }
