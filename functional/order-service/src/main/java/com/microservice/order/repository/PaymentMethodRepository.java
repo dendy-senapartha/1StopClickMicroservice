@@ -1,13 +1,15 @@
 package com.microservice.order.repository;
 
 import com.microservice.order.model.PaymentMethod;
-import com.microservice.order.repository.dao.PaymentMethodDao;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 /*
@@ -16,42 +18,7 @@ import java.util.Optional;
  */
 
 @Transactional
-@Component
-public class PaymentMethodRepository implements PaymentMethodDao {
+@Repository
+public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Serializable> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    public Optional<PaymentMethod> findById(Integer id) {
-        String hql = "FROM PaymentMethod pymthd WHERE pymthd.id = :id";
-        Query query = entityManager.createQuery(hql);
-        query.setParameter("id", id);
-        List<PaymentMethod> results = query.getResultList();
-        PaymentMethod paymentMethod = null;
-        for (PaymentMethod e : results) {
-            paymentMethod = e;
-        }
-        return Optional.ofNullable(paymentMethod);
-    }
-
-    @Override
-    public List<PaymentMethod> findAll() {
-        return null;
-    }
-
-    @Override
-    public boolean save(PaymentMethod paymentMethod) {
-        return false;
-    }
-
-    @Override
-    public boolean update(PaymentMethod paymentMethod) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(PaymentMethod paymentMethod) {
-        return false;
-    }
 }

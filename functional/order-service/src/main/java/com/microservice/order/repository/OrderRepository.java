@@ -1,14 +1,14 @@
 package com.microservice.order.repository;
 
 import com.microservice.order.model.Orders;
-import com.microservice.order.repository.dao.OrderDao;
-import org.hibernate.HibernateException;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,105 +18,25 @@ import java.util.Optional;
  */
 
 @Transactional
-@Component
-public class OrderRepository implements OrderDao {
+@Repository
+public interface OrderRepository extends JpaRepository<Orders, Serializable> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Query("SELECT DISTINCT ords FROM Orders ords " +
+            "INNER JOIN ords.invoice invc " +
+            "WHERE invc.userId= :userId " +
+            "AND (invc.status NOT LIKE 'DRAFT' AND invc.status NOT LIKE 'ISSUED')")
+    List<Orders> getFinishedOrderByUserId(@Param("userId") long userId);
 
-    @Override
-    public List<Orders> getFinishedOrderByUserId(long userId) {
-        String hql = "SELECT DISTINCT ords FROM Orders ords " +
-                "INNER JOIN ords.invoice invc " +
-                "WHERE invc.userId=" + userId + " " +
-                "AND (invc.status NOT LIKE 'DRAFT' AND invc.status NOT LIKE 'ISSUED')";
-        //System.out.println(hql);
-        Query query = entityManager.createQuery(hql);
-        List<Orders> results = query.getResultList();
-        return results;
-    }
+    @Query("SELECT DISTINCT ords FROM Orders ords " +
+            "INNER JOIN ords.invoice invc " +
+            "WHERE invc.userId=:userId " +
+            "AND (invc.status LIKE 'DRAFT' OR invc.status LIKE 'ISSUED')")
+    List<Orders> getUserOrderNeedTooPay(@Param("userId") long userId) ;
 
-    @Override
-    public List<Orders> getUserOrderNeedTooPay(long userId) {
-        String hql = "SELECT DISTINCT ords FROM Orders ords " +
-                "INNER JOIN ords.invoice invc " +
-                "WHERE invc.userId=" + userId + " " +
-                "AND (invc.status LIKE 'DRAFT' OR invc.status LIKE 'ISSUED')";
-        //System.out.println(hql);
-        Query query = entityManager.createQuery(hql);
-        List<Orders> results = query.getResultList();
-        return results;
-    }
+    @Query("SELECT DISTINCT ords FROM Orders ords " +
+            "INNER JOIN ords.invoice invc " +
+            "WHERE invc.userId= :userId " +
+            "AND invc.status LIKE 'DRAFT'")
+    List<Orders> findUserDraftOrder(@Param("userId") long userId);
 
-    @Override
-    public List<Orders> findUserDraftOrder(long userId) {
-        String hql = "SELECT DISTINCT ords FROM Orders ords " +
-                "INNER JOIN ords.invoice invc " +
-                "WHERE invc.userId=" + userId + " " +
-                "AND invc.status LIKE 'DRAFT'";
-        //System.out.println(hql);
-        Query query = entityManager.createQuery(hql);
-        List<Orders> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public Optional<Orders> findById(Integer id) {
-        String hql = "FROM Orders orders WHERE orders.id = "+id;
-        //System.out.println(hql);
-        Query query = entityManager.createQuery(hql);
-        //List result = query.list();
-        List<Orders> results = query.getResultList();
-        //session.close();
-        Orders orders1 = null;
-        for (Orders orders : results) {
-            orders1 = orders;
-        }
-        return Optional.ofNullable(orders1);
-    }
-
-    @Override
-    public List<Orders> findAll() {
-        return null;
-    }
-
-    @Override
-    public boolean save(Orders orders) {
-        boolean status;
-        try {
-            entityManager.persist(orders);
-            status = true;
-        } catch (HibernateException ex) {
-            System.out.println("exception: " + ex);
-            status = false;
-        }
-
-        return status;
-    }
-
-    @Override
-    public boolean update(Orders orders) {
-        boolean status = false;
-        try {
-            entityManager.merge(orders);
-            status = true;
-        } catch (HibernateException ex) {
-            System.out.println("exception: " + ex);
-        }
-
-        return status;
-    }
-
-    @Override
-    public boolean delete(Orders order) {
-        boolean status = false;
-        try {
-            entityManager.remove(entityManager.contains(order) ? order : entityManager.merge(order));
-            //entityManager.remove(order);
-            status = true;
-        } catch (HibernateException ex) {
-            System.out.println("exception: " + ex);
-        }
-        return status;
-    }
 }
