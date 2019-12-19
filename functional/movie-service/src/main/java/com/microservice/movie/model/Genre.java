@@ -2,9 +2,11 @@ package com.microservice.movie.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -15,6 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "genre")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Data
 public class Genre {
 
     @Id
@@ -25,29 +28,5 @@ public class Genre {
     private String name;
 
     @ManyToMany(mappedBy = "genres")
-    private Set<Product> products = new HashSet<>();
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
+    private List<Product> products;
 }

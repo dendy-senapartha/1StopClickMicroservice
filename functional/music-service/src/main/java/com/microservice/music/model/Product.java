@@ -3,6 +3,7 @@ package com.microservice.music.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Data;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
@@ -19,6 +20,7 @@ import java.util.*;
 @Entity
 @Table(name = "product")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Data
 public class Product {
 
     @Id
@@ -52,13 +54,13 @@ public class Product {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "product_id")
     @JsonIgnoreProperties("product")
-    private List<ProductImage> productImageList = new ArrayList<>();
+    private List<ProductImage> productImageList;
 
     @OneToMany(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "product_id")
     @JsonIgnoreProperties("product")
-    private List<Track> trackList = new ArrayList<>();
+    private List<Track> trackList;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -68,87 +70,7 @@ public class Product {
     @JoinTable(name = "product_subcategory",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "subcategory_id", referencedColumnName = "id")})
-    private Set<Subcategory> subcategories = new HashSet<>();
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public BigDecimal getPackageCode() {
-        return packageCode;
-    }
-
-    public void setPackageCode(BigDecimal packageCode) {
-        this.packageCode = packageCode;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCompatibility() {
-        return compatibility;
-    }
-
-    public void setCompatibility(String compatibility) {
-        this.compatibility = compatibility;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public List<ProductImage> getProductImageList() {
-        return productImageList;
-    }
-
-    public void setProductImageList(List<ProductImage> productImageList) {
-        this.productImageList = productImageList;
-    }
-
-    public List<Track> getTrackList() {
-        return trackList;
-    }
-
-    public void setTrackList(List<Track> trackList) {
-        this.trackList = trackList;
-    }
+    private List<Subcategory> subcategories ;
 
     public void addSubcategory(Subcategory subcategory) {
         subcategories.add(subcategory);

@@ -2,11 +2,14 @@ package com.microservice.music.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -22,92 +25,48 @@ public class Subcategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private int id;
 
     @Column(name = "name")
+    @Getter
+    @Setter
     private String name;
 
     @Column(name = "target")
+    @Getter
+    @Setter
     private String target;
 
     @Column(name = "priority")
+    @Getter
+    @Setter
     private int priority;
 
     @Column(name = "is_active")
+    @Getter
+    @Setter
     private boolean isActive;
 
     @Column(name = "created", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
     private Date created;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
+    @Setter
     private Category category;
 
     @ManyToMany(mappedBy = "subcategories")
-    private Set<Product> products = new HashSet<>();
+    @Getter
+    @Setter
+    private List<Product> products ;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
 
     public Category getCategory() {
         return (Category) Hibernate.unproxy(category);
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
     }
 }

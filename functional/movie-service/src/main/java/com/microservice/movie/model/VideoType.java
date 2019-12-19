@@ -2,6 +2,7 @@ package com.microservice.movie.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Data;
 
 import javax.persistence.*;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "video_type")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Data
 public class VideoType {
 
     @Id
@@ -24,28 +26,4 @@ public class VideoType {
 
     @Column(name = "name")
     private String name;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

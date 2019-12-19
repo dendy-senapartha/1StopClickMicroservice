@@ -1,13 +1,13 @@
 package com.microservice.movie.repository;
 
 import com.microservice.movie.model.Product;
-import com.microservice.movie.repository.dao.ProductDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,55 +18,8 @@ import java.util.Optional;
 
 @Transactional
 @Component
-public class ProductRepository implements ProductDao {
+public interface ProductRepository extends JpaRepository<Product, Serializable> {
 
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    public Optional<Product> findById(Integer id) {
-        String hql = "FROM Product prdct WHERE prdct.id = :id";
-        Query query = entityManager.createQuery(hql);
-        query.setParameter("id", id);
-        //List result = query.list();
-        List<Product> results = query.getResultList();
-        //session.close();
-        Product product1 = null;
-        for (Product product : results) {
-            product1 = product;
-        }
-        return Optional.ofNullable(product1);
-    }
-
-    @Override
-    public List<Product> findAll() {
-        String hql = "FROM Product";
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
-
-    @Override
-    public boolean save(Product o) {
-        return false;
-    }
-
-    @Override
-    public boolean update(Product o) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Product o) {
-        return false;
-    }
-
-    @Override
-    public List<Product> getMovieByGenre(String genreId) {
-        String hql = "SELECT prdct FROM Product prdct join prdct.genres gnrs WHERE gnrs.id = " + genreId;
-        Query query = entityManager.createQuery(hql);
-        List<Product> results = query.getResultList();
-        return results;
-    }
+    @Query("SELECT prdct FROM Product prdct join prdct.genres gnrs WHERE gnrs.id = :genreId")
+    List<Product> getMovieByGenre(@Param("genreId") String genreId);
 }

@@ -1,6 +1,6 @@
 package com.microservice.auth.event;
 
-import com.microservice.auth.dao.repository.UserRepository;
+import com.microservice.auth.repository.UserRepository;
 import com.microservice.auth.model.User;
 import com.microservice.auth.model.UserProfile;
 import com.microservice.auth.service.AuthenticationService;
