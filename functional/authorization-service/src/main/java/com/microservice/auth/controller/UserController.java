@@ -40,10 +40,10 @@ public class UserController {
         return ResponseEntity.ok(userService.RegisterUser(user));
     }
 
-    @GetMapping(value = "/get-user-profile")
-    public ResponseEntity<DefaultResponse> getUserProfileByUserId(Principal principal) {
+    @GetMapping(value = "/info")
+    public ResponseEntity<?> getUserProfileByUserId(Principal principal) {
         if (principal != null) {
-            return ResponseEntity.ok(userService.getUserByEmail(principal.getName()));
+            return ResponseEntity.ok(userService.getUserByEmail(principal.getName()).getData());
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
