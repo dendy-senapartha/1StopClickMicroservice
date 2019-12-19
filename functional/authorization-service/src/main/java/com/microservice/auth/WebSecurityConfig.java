@@ -54,4 +54,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+	@Bean
+	CorsFilter corsFilter() {
+		CorsFilter filter = new CorsFilter();
+		return filter;
+	}
 }
