@@ -3,6 +3,7 @@ package com.microservice.movie.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Data;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
@@ -18,6 +19,7 @@ import java.util.*;
 @Entity
 @Table(name = "product")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Data
 public class Product {
 
     @Id
@@ -51,7 +53,7 @@ public class Product {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "product_id")
     @JsonIgnoreProperties("product")
-    private List<ProductImage> productImageList = new ArrayList<>();
+    private List<ProductImage> productImageList;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -61,102 +63,6 @@ public class Product {
     @JoinTable(name = "product_genre",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "genre_id", referencedColumnName = "id")})
-    private Set<Genre> genres = new HashSet<>();
+    private List<Genre> genres;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public BigDecimal getPackageCode() {
-        return packageCode;
-    }
-
-    public void setPackageCode(BigDecimal packageCode) {
-        this.packageCode = packageCode;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCompatibility() {
-        return compatibility;
-    }
-
-    public void setCompatibility(String compatibility) {
-        this.compatibility = compatibility;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public void addGenre(Genre genre) {
-        getGenres().add(genre);
-        genre.getProducts().add(this);
-    }
-
-    public void removeGenre(Genre genre) {
-        genre.getProducts().remove(this);
-        getGenres().remove(genre);
-    }
-
-    public void removeAllGenre() {
-        for (Genre genre : getGenres()) {
-            genre.getProducts().remove(this);
-        }
-        getGenres().clear();
-    }
-
-    public List<ProductImage> getProductImageList() {
-        return productImageList;
-    }
-
-    public void setProductImageList(List<ProductImage> productImageList) {
-        this.productImageList = productImageList;
-    }
-
-    public Set<Genre> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
-    }
 }

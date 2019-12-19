@@ -3,10 +3,11 @@ package com.microservice.movie.controller;
 import com.microservice.movie.dto.MovieDTO;
 import com.microservice.movie.dto.request.GetMovieByGenreRequest;
 import com.microservice.movie.dto.request.GetMovieByIdRequest;
+import com.microservice.movie.dto.response.DefaultResponse;
 import com.microservice.movie.model.Product;
 import com.microservice.movie.model.Video;
-import com.microservice.movie.repository.dao.ProductDao;
-import com.microservice.movie.repository.dao.VideoDao;
+import com.microservice.movie.repository.ProductRepository;
+import com.microservice.movie.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
@@ -31,43 +32,37 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MovieController {
 
-    private final ProductDao productRepository;
+    private final ProductService productService;
 
-    private final VideoDao videoRepository;
-
-    private final ModelMapper modelMapper;
-
-    @GetMapping(value = "/get-all-movie",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get-all-movie")
     public ResponseEntity<?> getAllMovie() {
-        List<MovieDTO> movieDTO = new ArrayList<>();
-        List<Product> movieList = productRepository.findAll();
-        for (Product product : movieList) {
-            movieDTO.add(modelMapper.map(product, MovieDTO.class));
+        DefaultResponse response = productService.getAllMovie();
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response.getData());
+        } else {
+            return ResponseEntity.ok(response.getMessage());
         }
-        return ResponseEntity.ok(movieDTO);
     }
 
-    @PostMapping(value = "/get-movie-by-genre",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/get-movie-by-genre")
     public ResponseEntity<?> getMovieByGenre(@RequestBody GetMovieByGenreRequest request) {
-        List<MovieDTO> movieDTO = new ArrayList<>();
-        List<Product> movieList = productRepository.getMovieByGenre(request.getGenreId() + "");
-        for (Product product : movieList) {
-            movieDTO.add(modelMapper.map(product, MovieDTO.class));
+        DefaultResponse response = productService.getMovieByGenre(request.getGenreId());
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response.getData());
+        } else {
+            return ResponseEntity.ok(response.getMessage());
         }
-        return ResponseEntity.ok(movieDTO);
     }
 
     @PostMapping(value = "/get-movie-by-id",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getMovieById(@RequestBody GetMovieByIdRequest request) {
-        MovieDTO result = new MovieDTO();
-        Optional<Product> movie = productRepository.findById(request.getId());
-        if (movie.isPresent()) {
-            result = modelMapper.map(movie.get(), MovieDTO.class);
+        DefaultResponse response = productService.getMovieById(request.getId());
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response.getData());
+        } else {
+            return ResponseEntity.ok(response.getMessage());
         }
-        return ResponseEntity.ok(result);
     }
 
 }
