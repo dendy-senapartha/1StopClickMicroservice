@@ -2,10 +2,13 @@ package com.microservice.auth.service;
 
 import com.microservice.auth.dto.UserDTO;
 import com.microservice.auth.dto.response.DefaultResponse;
+import com.microservice.auth.errors.EmailAlreadyUsedException;
+import com.microservice.auth.errors.ForbiddenException;
 import com.microservice.auth.model.Role;
 import com.microservice.auth.model.User;
 import com.microservice.auth.repository.RoleRepository;
 import com.microservice.auth.repository.UserRepository;
+import com.microservice.auth.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +16,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +35,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -61,13 +66,18 @@ public class UserService implements UserDetailsService {
         }
         Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
         if (userOptional.isPresent()) {
-            return new DefaultResponse(false, "Email already Used!", null);
+            throw new EmailAlreadyUsedException();
         } else {
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
             return new DefaultResponse(true, "User saved!", userRepository.save(user));
         }
     }
 
     public DefaultResponse updateUser(User user) {
+        if (!SecurityUtils.getCurrentUserLogin().isPresent()) {
+            throw new ForbiddenException("Access forbidden", "invalid principal.", "330103");
+        }
         Optional<User> userOptional = userRepository.findById(user.getId());
         if (userOptional.isPresent()) {
             return new DefaultResponse(true, "User Updated!", userRepository.save(user));
