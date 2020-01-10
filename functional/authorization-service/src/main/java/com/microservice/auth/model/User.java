@@ -22,6 +22,11 @@ import java.util.Set;
 @Table(name = "users")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class User implements UserDetails {
+
+    public static final int PASSWORD_MIN_LENGTH = 4;
+
+    public static final int PASSWORD_MAX_LENGTH = 100;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
