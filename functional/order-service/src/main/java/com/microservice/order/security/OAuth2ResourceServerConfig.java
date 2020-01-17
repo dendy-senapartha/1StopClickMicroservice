@@ -1,6 +1,7 @@
 package com.microservice.order.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -18,9 +19,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableResourceServer
 @RequiredArgsConstructor
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
-	private final Environment env;
-
-	private static final String TOKEN_SIGNING_KEY = "token.signingKey";
+	@Value("${token.signingKey}")
+	private String TOKEN_SIGNING_KEY;
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer configurer) {
@@ -34,7 +34,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey(env.getRequiredProperty(TOKEN_SIGNING_KEY, String.class));
+		converter.setSigningKey(TOKEN_SIGNING_KEY);
 		return converter;
 	}
 }

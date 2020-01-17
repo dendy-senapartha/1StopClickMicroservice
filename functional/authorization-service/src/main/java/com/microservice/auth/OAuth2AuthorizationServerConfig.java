@@ -1,6 +1,7 @@
 package com.microservice.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -25,11 +26,13 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     //http://olivergierke.de/2013/11/why-field-injection-is-evil/
 	private final AuthenticationManager authenticationManager;
 	private final PasswordEncoder passwordEncoder;
-	private final Environment env;
 
-	private static final String TOKEN_SIGNING_KEY = "token.signingKey";
-	private static final String TOKEN_VALIDITY = "token.validity";
-	private static final String TOKEN_REFRESH_VALIDITY = "token.refreshValidity";
+    @Value("${token.signingKey}")
+	private String TOKEN_SIGNING_KEY;
+    @Value("${token.validity}")
+	private int TOKEN_VALIDITY;
+    @Value("${token.refreshValidity}")
+	private int TOKEN_REFRESH_VALIDITY;
 
     @Override
 	public void configure(final AuthorizationServerEndpointsConfigurer endpoints){
@@ -44,8 +47,8 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 				.secret(passwordEncoder.encode("secret"))
 				.autoApprove(true)
 				.authorizedGrantTypes("password", "refresh_token")
-				.scopes("read", "write").accessTokenValiditySeconds(env.getRequiredProperty(TOKEN_VALIDITY, Integer.class))
-				.refreshTokenValiditySeconds(env.getRequiredProperty(TOKEN_REFRESH_VALIDITY, Integer.class));
+				.scopes("read", "write").accessTokenValiditySeconds(TOKEN_VALIDITY)
+				.refreshTokenValiditySeconds(TOKEN_REFRESH_VALIDITY);
 	}
 
 	@Bean
@@ -56,7 +59,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey(env.getRequiredProperty(TOKEN_SIGNING_KEY, String.class));
+		converter.setSigningKey(TOKEN_SIGNING_KEY);
 		// final KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("mytest.jks"), "mypass".toCharArray());
 		// converter.setKeyPair(keyStoreKeyFactory.getKeyPair("mytest"));
 		return converter;

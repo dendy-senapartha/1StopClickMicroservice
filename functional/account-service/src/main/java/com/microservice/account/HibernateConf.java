@@ -3,6 +3,7 @@ package com.microservice.account;
 import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -18,14 +19,24 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource({"classpath:hibernate.properties"})
 @ComponentScans(value = {
-        @ComponentScan("com.microservice.account.dao.repository")
+        @ComponentScan("com.microservice.account.repository")
 })
 @RequiredArgsConstructor
 public class HibernateConf {
 
-    private final Environment env;
+    @Value("${jdbc.driverClassName}")
+    private String DRIVER;
+    @Value("${jdbc.url}")
+    private String URL;
+    @Value("${jdbc.user}")
+    private String USER;
+    @Value("${jdbc.pass}")
+    private String PASSWORD;
+    @Value("${hibernate.dialect}")
+    private String DIALECT;
+    @Value("${hibernate.hbm2ddl.auto}")
+    private String HBM2DDL;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -47,25 +58,19 @@ public class HibernateConf {
 
     @Bean
     public DataSource dataSource() {
-        String driver = Preconditions.checkNotNull(env.getProperty("jdbc.driverClassName"));
-        String url = Preconditions.checkNotNull(env.getProperty("jdbc.url"));
-        String user = Preconditions.checkNotNull(env.getProperty("jdbc.user"));
-        String password = Preconditions.checkNotNull(env.getProperty("jdbc.pass"));
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(url);
-        dataSource.setUsername(user);
-        dataSource.setPassword(password);
+        dataSource.setDriverClassName(DRIVER);
+        dataSource.setUrl(URL);
+        dataSource.setUsername(USER);
+        dataSource.setPassword(PASSWORD);
 
         return dataSource;
     }
 
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
-        String dialect = Preconditions.checkNotNull(env.getProperty("hibernate.dialect"));
-        String hbm2ddl = Preconditions.checkNotNull(env.getProperty("hibernate.hbm2ddl.auto"));
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
-        hibernateProperties.setProperty("hibernate.dialect", dialect);
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", HBM2DDL);
+        hibernateProperties.setProperty("hibernate.dialect", DIALECT);
 
         return hibernateProperties;
     }
