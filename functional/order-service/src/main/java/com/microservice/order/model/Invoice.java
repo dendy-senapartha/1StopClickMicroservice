@@ -2,6 +2,8 @@ package com.microservice.order.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 
@@ -21,82 +23,43 @@ public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private int id;
 
     @OneToOne
     @MapsId
+    @Getter
+    @Setter
     private Orders orders;
 
     @Column(name = "user_id")
+    @Getter
+    @Setter
     private Long userId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "payment_method_id")
+    @Setter
     private PaymentMethod paymentMethod;
 
     @Column(name = "description")
+    @Getter
+    @Setter
     private String description;
 
     @Column(name = "status")
+    @Getter
+    @Setter
     private String status;
 
     @Column(name = "created")
+    @Getter
+    @Setter
     private Date created;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public PaymentMethod getPaymentMethod() {
         return (PaymentMethod) Hibernate.unproxy(paymentMethod) ;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Orders getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Orders orders) {
-        this.orders = orders;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }

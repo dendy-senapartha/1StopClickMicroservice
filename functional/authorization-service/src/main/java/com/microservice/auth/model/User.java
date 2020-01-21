@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,23 +31,34 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
 
     @Column(name = "email")
+    @Getter
+    @Setter
     private String email;
 
     @Column(name = "email_verified")
+    @Getter
+    @Setter
     private Boolean emailVerified = false;
 
     @JsonIgnore
     @Column(name = "password")
+    @Setter
     private String password;
 
     @NotNull
     @Column(name = "provider")
+    @Getter
+    @Setter
     private String provider;
 
     @Column(name = "provider_id")
+    @Getter
+    @Setter
     private String providerId;
 
     @OneToOne(mappedBy = "user",
@@ -83,14 +96,6 @@ public class User implements UserDetails {
         this.providerId = providerId;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -104,42 +109,6 @@ public class User implements UserDetails {
     public String getUsername() {
         //username is an email
         return getEmail();
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    public String getProviderId() {
-        return providerId;
-    }
-
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
     }
 
     public Set<Role> getRoles() {
