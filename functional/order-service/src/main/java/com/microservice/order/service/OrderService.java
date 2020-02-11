@@ -1,5 +1,6 @@
 package com.microservice.order.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservice.order.dto.InvoiceDTO;
 import com.microservice.order.dto.OrderDTO;
 import com.microservice.order.dto.OrderItemDTO;
@@ -15,7 +16,7 @@ import com.microservice.order.model.external.User;
 import com.microservice.order.repository.OrderItemCategoryRepository;
 import com.microservice.order.repository.OrderRepository;
 import com.microservice.order.repository.PaymentMethodRepository;
-import com.microservice.order.repository.external.AuthServiceClient;
+
 import com.microservice.order.repository.external.MovieServiceClient;
 import com.microservice.order.repository.external.MusicServiceClient;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,11 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -114,8 +118,10 @@ public class OrderService {
         return new DefaultResponse(true, "", result);
     }
 
-    public DefaultResponse getUserOrder() {
-        User user = authServiceClient.getUser().getBody();
+    public DefaultResponse getUserOrder() throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = new ObjectMapper().readValue(
+                authServiceClient.getUser(authentication.getPrincipal().toString()).toString(), User.class);
         List<Orders> ordersList = orderRepository.getFinishedOrderByUserId(user.getId());
         modelMapper.addConverter(orderConverter);
 
@@ -123,8 +129,10 @@ public class OrderService {
                 ordersList.stream().map(orders -> modelMapper.map(orders, OrderDTO.class)));
     }
 
-    public DefaultResponse getUserOrderNeedToPay() {
-        User user = authServiceClient.getUser().getBody();
+    public DefaultResponse getUserOrderNeedToPay() throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = new ObjectMapper().readValue(
+                authServiceClient.getUser(authentication.getPrincipal().toString()).toString(), User.class);
         List<Orders> ordersList = orderRepository.getUserOrderNeedTooPay(user.getId());
         modelMapper.addConverter(orderConverter);
 
@@ -180,9 +188,12 @@ public class OrderService {
     }
 
     public DefaultResponse addItemToOrder(String productId, String category, String quantity)
-            throws ParseException {
+            throws ParseException, IOException {
         int qty = Integer.parseInt(quantity);
-        User user = authServiceClient.getUser().getBody();
+        //User user = authServiceClient.getUser().getBody();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = new ObjectMapper().readValue(
+                authServiceClient.getUser(authentication.getPrincipal().toString()).toString(), User.class);
         BigDecimal subtotal = null;
 
         OrderItemCategory ctgry = orderItemCategoryRepository.findByName(category);

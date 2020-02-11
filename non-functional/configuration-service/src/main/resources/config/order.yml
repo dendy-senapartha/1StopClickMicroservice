@@ -13,6 +13,10 @@ hibernate:
   hbm2ddl:
     auto: validate
 
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+
 logging:
   level:
     org.springframework.data.rest: DEBUG

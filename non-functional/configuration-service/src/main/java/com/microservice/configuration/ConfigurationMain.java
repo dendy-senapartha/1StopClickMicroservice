@@ -2,8 +2,10 @@ package com.microservice.configuration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
+import org.springframework.context.event.EventListener;
 
 /*
  * Created by dendy-prtha on 20/08/2019.
@@ -17,5 +19,10 @@ public class ConfigurationMain {
 
     public static void main(String[] args) {
         SpringApplication.run(ConfigurationMain.class, args);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void doSomethingAfterStartup() {
+        System.out.println("Configuration service ready!");
     }
 }

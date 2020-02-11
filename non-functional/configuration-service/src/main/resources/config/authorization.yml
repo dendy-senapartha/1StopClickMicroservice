@@ -19,6 +19,10 @@ hibernate:
   hbm2ddl:
     auto: validate
 
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+
 security:
   oauth2:
     client:
