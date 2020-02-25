@@ -18,6 +18,7 @@ import com.microservice.order.repository.PaymentMethodRepository;
 import com.microservice.order.repository.external.AuthServiceClient;
 import com.microservice.order.repository.external.MovieServiceClient;
 import com.microservice.order.repository.external.MusicServiceClient;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -114,6 +115,7 @@ public class OrderService {
         return new DefaultResponse(true, "", result);
     }
 
+    @HystrixCommand(fallbackMethod = "showingEmptyOrderList")
     public DefaultResponse getUserOrder() {
         User user = authServiceClient.getUser().getBody();
         List<Orders> ordersList = orderRepository.getFinishedOrderByUserId(user.getId());
@@ -123,6 +125,7 @@ public class OrderService {
                 ordersList.stream().map(orders -> modelMapper.map(orders, OrderDTO.class)));
     }
 
+    @HystrixCommand(fallbackMethod = "showingEmptyOrderList")
     public DefaultResponse getUserOrderNeedToPay() {
         User user = authServiceClient.getUser().getBody();
         List<Orders> ordersList = orderRepository.getUserOrderNeedTooPay(user.getId());
@@ -130,6 +133,10 @@ public class OrderService {
 
         return new DefaultResponse(true, "",
                 ordersList.stream().map(orders -> modelMapper.map(orders, OrderDTO.class)));
+    }
+
+    public DefaultResponse showingEmptyOrderList() {
+        return new DefaultResponse(false, "Failing when try to retrieve user data", new ArrayList<Orders>());
     }
 
     public Orders createOrder(CreateOrderRequest createOrderRequest) throws ParseException {
@@ -179,6 +186,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @HystrixCommand(fallbackMethod = "showingEmptyOrderList")
     public DefaultResponse addItemToOrder(String productId, String category, String quantity)
             throws ParseException {
         int qty = Integer.parseInt(quantity);
